@@ -717,3 +717,40 @@ Synchronisatie word hier geforceerd met reads en writes, De struct word hier nie
 ```bash
 man pthread_create
 ```
+
+Om te compilen.
+
+```bash
+gcc -pthread <file>.c
+```
+
+```c
+  1 #include <pthread.h>
+  2 #include <stdio.h>
+  3
+  4 #define N 4
+  5
+  6 void *worker(void *a) {
+  7         int *n=(int*)a;
+  8         int i;
+  9         for (i=0;i<100;i++){
+ 10                 printf("%d\n", *n);
+ 11         }
+ 12         return ;
+ 13 }
+ 14
+ 15 int main(int arc, char** argv) {
+ 16         srand(time(0));
+ 17         pthread_t threads[N];
+ 18         int numbers[N]={1, 2, 3, 4};
+ 19         int i;
+ 20         for (i=0;i<N;i++){
+ 21                 pthread_create(&threads[i],NULL, worker, (void*)&numbers[i]);
+ 22         }
+ 23
+ 24         for (i=0;i<N;i++){
+ 25                 pthread_join(threads[i],NULL);
+ 26         }
+ 27         return 0;
+ 28 }
+```
